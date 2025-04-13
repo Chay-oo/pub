@@ -14,7 +14,7 @@ Finaq is a comprehensive financial management platform that helps users track, a
 - Financial analytics
 - Dashboard overview
 - Responsive design
-- Real-time updates
+- Blog Management
 
 ## Installation
 
