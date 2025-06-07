@@ -1,72 +1,106 @@
-import React, { useState } from 'react';
-import { Calculator, Home, User, Percent, TrendingUp, Car, ArrowLeft, Flame } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Home, Percent, DollarSign, Car, Briefcase, Calculator, PiggyBank } from 'lucide-react';
+
+// Calculator components
 import MortgageCalculator from '../components/calculators/MortgageCalculator';
-import PersonalLoanCalculator from '../components/calculators/PersonalLoanCalculator';
-import SimpleInterestCalculator from '../components/calculators/SimpleInterestCalculator';
-import CompoundInterestCalculator from '../components/calculators/CompoundInterestCalculator';
-import VehicleLoanCalculator from '../components/calculators/VehicleLoanCalculator';
-import FIRECalculator from '../components/calculators/FIRECalculator';
+import InvestmentCalculator from '../components/calculators/InvestmentCalculator';
+import SavingsCalculator from '../components/calculators/SavingsCalculator';
+import LoanCalculator from '../components/calculators/LoanCalculator';
 
-const calculators = [
-  { id: 'mortgage', name: 'Mortgage Loan', icon: Home, component: MortgageCalculator },
-  { id: 'personal', name: 'Personal Loan', icon: User, component: PersonalLoanCalculator },
-  { id: 'simple', name: 'Simple Interest', icon: Percent, component: SimpleInterestCalculator },
-  { id: 'compound', name: 'Compound Interest', icon: TrendingUp, component: CompoundInterestCalculator },
-  { id: 'vehicle', name: 'Vehicle Loan', icon: Car, component: VehicleLoanCalculator },
-  { id: 'fire', name: 'FIRE Calculator', icon: Flame, component: FIRECalculator },
-];
+const CalculatorCard = ({ title, description, icon, path }: { title: string; description: string; icon: React.ReactNode; path: string }) => {
+  return (
+    <Link 
+      to={`/calculators${path}`}
+      className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow"
+    >
+      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+        {icon}
+      </div>
+      <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+      <p className="mt-2 text-gray-600 text-sm">{description}</p>
+    </Link>
+  );
+};
 
-export default function Calculators() {
-  const navigate = useNavigate();
-  const [activeCalculator, setActiveCalculator] = useState('mortgage');
-
-  const ActiveComponent = calculators.find(calc => calc.id === activeCalculator)?.component || MortgageCalculator;
+const CalculatorHome = () => {
+  const calculators = [
+    { 
+      title: 'Mortgage Calculator', 
+      description: 'Calculate monthly payments, interest, and amortization schedule for home loans.',
+      icon: <Home className="w-6 h-6" />,
+      path: '/mortgage'
+    },
+    { 
+      title: 'Investment Calculator', 
+      description: 'Project future investment growth with different contribution scenarios.',
+      icon: <Briefcase className="w-6 h-6" />,
+      path: '/investment'
+    },
+    { 
+      title: 'Savings Calculator', 
+      description: 'Plan your savings goals and visualize your progress over time.',
+      icon: <PiggyBank className="w-6 h-6" />,
+      path: '/savings'
+    },
+    { 
+      title: 'Loan Calculator', 
+      description: 'Understand your loan terms, payments, and total interest costs.',
+      icon: <DollarSign className="w-6 h-6" />,
+      path: '/loan'
+    },
+    { 
+      title: 'Car Loan Calculator', 
+      description: 'Calculate auto loan payments and compare financing options.',
+      icon: <Car className="w-6 h-6" />,
+      path: '/car-loan'
+    },
+    { 
+      title: 'Compound Interest', 
+      description: 'See the power of compound interest on your investments over time.',
+      icon: <Percent className="w-6 h-6" />,
+      path: '/compound-interest'
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-7xl mx-auto">
-        <button
-          onClick={() => navigate('/')}
-          className="mb-4 flex items-center text-indigo-600 hover:text-indigo-700 font-medium"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1" />
-          Back to Home
-        </button>
+    <div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Financial Calculators</h1>
+        <p className="mt-2 text-gray-600">
+          Use our suite of calculators to make informed financial decisions.
+        </p>
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* Navigation Sidebar */}
-          <div className="lg:w-64 bg-white rounded-xl shadow-sm p-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <Calculator className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-lg font-semibold">Calculators</h2>
-            </div>
-            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0">
-              {calculators.map(({ id, name, icon: Icon }) => (
-                <button
-                  key={id}
-                  onClick={() => setActiveCalculator(id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
-                    activeCalculator === id
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-medium">{name}</span>
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Calculator Content */}
-          <div className="flex-1">
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <ActiveComponent />
-            </div>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {calculators.map((calc, index) => (
+          <CalculatorCard 
+            key={index}
+            title={calc.title}
+            description={calc.description}
+            icon={calc.icon}
+            path={calc.path}
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
+
+const Calculators = () => {
+  const location = useLocation();
+  
+  return (
+    <Routes>
+      <Route index element={<CalculatorHome />} />
+      <Route path="/mortgage" element={<MortgageCalculator />} />
+      <Route path="/investment" element={<InvestmentCalculator />} />
+      <Route path="/savings" element={<SavingsCalculator />} />
+      <Route path="/loan" element={<LoanCalculator />} />
+      <Route path="/car-loan" element={<MortgageCalculator />} />
+      <Route path="/compound-interest" element={<InvestmentCalculator />} />
+    </Routes>
+  );
+};
+
+export default Calculators;
